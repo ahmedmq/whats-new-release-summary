@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: whats-new-release-summary
+  autoconfigure:
+    exclude: org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
+tracker:
+  api:
+    baseUrl: https://www.pivotaltracker.com/services/v5
+    token: 1234
