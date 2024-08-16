@@ -44,6 +44,7 @@ dependencies {
 	testImplementation("com.microsoft.playwright:playwright:1.46.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testImplementation("io.mockk:mockk:1.13.12")
+	testImplementation("com.ninja-squad:springmockk:4.0.2")
 }
 
 dependencyManagement {

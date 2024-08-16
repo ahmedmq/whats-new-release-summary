@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.service.annotation.GetExchange
+import java.time.LocalDateTime
 
 interface TrackerClient {
 
@@ -38,7 +39,7 @@ data class ProjectResponse(
 data class ReleaseResponse(
     val id: Int,
     val name: String,
-    @JsonProperty("accepted_at") val acceptedAt: String
+    @JsonProperty("accepted_at") val acceptedAt: LocalDateTime
 )
 
 data class StoryResponse(

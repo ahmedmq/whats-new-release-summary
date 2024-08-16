@@ -7,7 +7,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
 class WhatsNewRepositoryTest {
@@ -17,7 +17,9 @@ class WhatsNewRepositoryTest {
     private val testWhatsNew = WhatsNew(
         1,
         1,
-        LocalDate.of(2024, 1, 1)
+        LocalDateTime.of(2024, 1, 1,0,0,0),
+        "",
+        ""
     )
 
     @Test
@@ -74,7 +76,7 @@ class WhatsNewRepositoryTest {
     }
 
     @Test
-    fun `whats new for release`() {
+    fun `whats new for project release`() {
         val getItemRequestSlot = slot<GetItemRequest>()
         every {
             runBlocking {
@@ -84,13 +86,14 @@ class WhatsNewRepositoryTest {
             item = testWhatsNew.toAttributeValues()
         }
 
-        val whatsNew = whatsNewRepository.findByProjectAndRelease(1, 1)
+        val whatsNew = whatsNewRepository.findByProjectIdAndReleaseId(1,1)
 
         with(getItemRequestSlot.captured) {
             assertEquals(WHATS_NEW_TABLE_NAME, tableName)
             assertEquals(
                 mapOf(
-                    "projectId" to AttributeValue.N("1")
+                    "projectId" to AttributeValue.N("1"),
+                    "releaseId" to AttributeValue.N("1")
                 ), key
             )
         }

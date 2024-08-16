@@ -3,7 +3,9 @@ package com.ahmedmq.whatsnew.release.summary.persistence
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
+import java.time.LocalDateTime
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 class WhatsNewTest {
 
@@ -12,9 +14,17 @@ class WhatsNewTest {
         val requiredEntries: Map<String, AttributeValue> = mapOf(
             "releaseId" to AttributeValue.N("1"),
             "projectId" to AttributeValue.N("1"),
-            "releaseDate" to AttributeValue.S("2024-01-01")
+            "acceptedDate" to AttributeValue.S("2024-01-01T00:00"),
+            "projectName" to AttributeValue.S(""),
+            "content" to AttributeValue.S("")
         )
-        val whatsNew = WhatsNew(1, 1, LocalDate.of(2024, 1, 1))
+        val whatsNew = WhatsNew(
+            1,
+            1,
+            LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+            "",
+            ""
+        )
 
         val toAttributeValues: Map<String, AttributeValue> = whatsNew.toAttributeValues()
 
@@ -26,13 +36,20 @@ class WhatsNewTest {
         val requiredEntries: Map<String, AttributeValue> = mapOf(
             "releaseId" to AttributeValue.N("1"),
             "projectId" to AttributeValue.N("1"),
-            "releaseDate" to AttributeValue.S("2024-01-01")
+            "acceptedDate" to AttributeValue.S("2024-01-01T00:00"),
+            "projectName" to AttributeValue.S(""),
+            "content" to AttributeValue.S("")
         )
 
         val whatsNew = requiredEntries.toWhatsNew()
 
-        assertThat(whatsNew.projectId).isEqualTo(1)
-        assertThat(whatsNew.releaseId).isEqualTo(1)
-        assertThat(whatsNew.releaseDate).isEqualTo(LocalDate.of(2024, 1, 1))
+        assertEquals(1, whatsNew.projectId)
+        assertEquals(1, whatsNew.releaseId)
+        assertEquals(
+            LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+            whatsNew.acceptedDate
+        )
+        assertEquals("", whatsNew.projectName)
+        assertEquals("", whatsNew.content)
     }
 }

@@ -13,7 +13,7 @@ const val WHATS_NEW_TABLE_NAME = "whats-new"
 @Repository
 class WhatsNewRepository(private val dynamoDbClient: DynamoDbClient) {
 
-    fun save(whatsNew: WhatsNew)  = runBlocking {
+    fun save(whatsNew: WhatsNew) = runBlocking {
         dynamoDbClient.putItem {
             tableName = WHATS_NEW_TABLE_NAME
             item = whatsNew.toAttributeValues()
@@ -23,6 +23,7 @@ class WhatsNewRepository(private val dynamoDbClient: DynamoDbClient) {
     fun findAllByProject(projectId: Int): List<WhatsNew> = runBlocking {
         dynamoDbClient.query {
             tableName = WHATS_NEW_TABLE_NAME
+            scanIndexForward = false
             keyConditionExpression = "projectId = :id"
             expressionAttributeValues = mapOf(
                 ":id" to AttributeValue.N(projectId.toString()),
@@ -30,11 +31,12 @@ class WhatsNewRepository(private val dynamoDbClient: DynamoDbClient) {
         }.items?.map { it.toWhatsNew() } ?: emptyList()
     }
 
-    fun findByProjectAndRelease(projectId: Int, releaseId: Int): WhatsNew? = runBlocking {
+    fun findByProjectIdAndReleaseId(projectId: Int, releaseId: Int): WhatsNew? = runBlocking {
         dynamoDbClient.getItem {
             tableName = WHATS_NEW_TABLE_NAME
             key = mapOf(
-                "projectId" to AttributeValue.N(projectId.toString())
+                "projectId" to AttributeValue.N(projectId.toString()),
+                "releaseId" to AttributeValue.N(releaseId.toString())
             )
         }.item?.toWhatsNew()
     }

@@ -6,4 +6,3 @@ spring:
 tracker:
   api:
     baseUrl: https://www.pivotaltracker.com/services/v5
-    token: 1234

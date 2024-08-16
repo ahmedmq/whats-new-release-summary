@@ -1,29 +1,49 @@
 package com.ahmedmq.whatsnew.release.summary.api
 
 import com.ahmedmq.whatsnew.release.summary.client.TrackerClient
+import com.ahmedmq.whatsnew.release.summary.persistence.WhatsNew
+import com.ahmedmq.whatsnew.release.summary.persistence.WhatsNewRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 
 @Service
-class WhatsNewService(val trackerClient: TrackerClient) {
-
-    @Value("\${tracker.api.token}")
-    lateinit var apiToken: String
+class WhatsNewService(val whatsNewRepository: WhatsNewRepository, val trackerClient: TrackerClient) {
 
     @Value("\${classpath:/prompts/whats-new-release}")
-    lateinit var whatsNewRelease : Resource
+    lateinit var whatsNewPrompt: Resource
 
-
-    fun generateWhatsNew() {
-        trackerClient.releases(
-            apiToken,
-            2644785,
-            mapOf(
-                "fields" to "id,name,current_state,points_accepted,points_total,counts_accepted,counts_total,accepted_at",
-                "with_state" to "accepted"
+    fun getWhatsNewForProject(whatsNewRequest: WhatsNewRequest): List<WhatsNew> {
+        val releases = trackerClient.releases(
+            whatsNewRequest.apiToken, whatsNewRequest.projectId, mapOf(
+                "fields" to "id,name,accepted_at",
+                "with_state" to "accepted_at"
             )
         )
+
+        return releases.reversed().mapIndexed { index, r ->
+            if (index == 0) {
+                whatsNewRepository.findByProjectIdAndReleaseId(
+                    whatsNewRequest.projectId,
+                    releases.last().id
+                ) ?: TODO()
+
+            } else {
+                WhatsNew(
+                    r.id,
+                    whatsNewRequest.projectId,
+                    r.acceptedAt,
+                    "",
+                    ""
+                )
+            }
+
+        }
     }
+
+
+    fun getWhatsNewForProjectRelease(projectId: Int, releaseId: Int): WhatsNew? =
+        whatsNewRepository.findByProjectIdAndReleaseId(projectId, releaseId)
+
 
 }

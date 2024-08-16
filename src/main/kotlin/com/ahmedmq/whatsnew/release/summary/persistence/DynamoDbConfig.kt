@@ -14,7 +14,6 @@ class DynamoDbConfig {
         return when (System.getenv("SPRING_PROFILES_ACTIVE")) {
             "local", "e2e" -> {
                 runBlocking {
-                    println("Setting DynamoDB for Local")
                     DynamoDbClient.fromEnvironment {
                         endpointUrl = Url.parse("http://localhost:8000")
                     }
@@ -23,7 +22,6 @@ class DynamoDbConfig {
 
             else -> {
                 runBlocking {
-                    println("Setting DynamoDB for Prod")
                     DynamoDbClient.fromEnvironment()
                 }
             }

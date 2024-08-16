@@ -6,6 +6,8 @@ Whats New Release Summary is a sample implementation of a generative AI applicat
 
 # Prerequisites
 
+- Pivotal Tracker API Token
+- Open AI Token
 - Docker
   - Docker is required to run application locally. Please refer to the [Docker](https://docs.docker.com/engine/install/) documentation for more information.
 

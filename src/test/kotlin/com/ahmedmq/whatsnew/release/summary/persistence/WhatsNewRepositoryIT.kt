@@ -1,6 +1,5 @@
 package com.ahmedmq.whatsnew.release.summary.persistence
 
-import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.createTable
 import aws.sdk.kotlin.services.dynamodb.model.AttributeDefinition
@@ -22,8 +21,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
-import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation::class)
@@ -35,8 +35,6 @@ class WhatsNewRepositoryIT {
                 .asCompatibleSubstituteFor("amazon/dynamodb-local")
         ).apply {
             withExposedPorts(8000)
-            withEnv("AWS_ACCESS_KEY_ID", "X")
-            withEnv("AWS_SECRET_ACCESS_KEY", "X")
         }
     }
 
@@ -49,7 +47,7 @@ class WhatsNewRepositoryIT {
 
     @Test
     @Order(1)
-    fun `get whats new for project`() {
+    fun `get all whats new releases for project`() {
         val whatsNewList = whatsNewRepository.findAllByProject(1)
 
         assertContentEquals(
@@ -57,7 +55,9 @@ class WhatsNewRepositoryIT {
                 WhatsNew(
                     1,
                     1,
-                    LocalDate.of(2024, 1, 1)
+                    LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                    "",
+                    ""
                 )
             ), whatsNewList
         )
@@ -65,13 +65,51 @@ class WhatsNewRepositoryIT {
 
     @Test
     @Order(2)
-    fun `save whats new`() {
-        whatsNewRepository.save(
+    fun `get whats new for project release`() {
+        val whatsNew = whatsNewRepository.findByProjectIdAndReleaseId(1, 1)
+
+        assertEquals(
             WhatsNew(
                 1,
                 1,
-                LocalDate.of(2023, 2, 2)
+                LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                "",
+                ""
+            ), whatsNew
+        )
+    }
+
+    @Test
+    @Order(3)
+    fun `save whats new and get all sorted in descending order`() {
+        whatsNewRepository.save(
+            WhatsNew(
+                2,
+                1,
+                LocalDateTime.of(2024, 2, 2, 0, 0, 0),
+                "",
+                ""
             )
+        )
+        val whatsNewList = whatsNewRepository.findAllByProject(1)
+
+        assertContentEquals(
+            listOf(
+                WhatsNew(
+                    2,
+                    1,
+                    LocalDateTime.of(2024, 2, 2, 0, 0, 0),
+                    "",
+                    ""
+                ),
+                WhatsNew(
+                    1,
+                    1,
+                    LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                    "",
+                    ""
+                )
+            ), whatsNewList
         )
     }
 
@@ -83,13 +121,8 @@ class WhatsNewRepositoryIT {
         fun dynamoDbClientTest(): DynamoDbClient =
             runBlocking {
                 DynamoDbClient.fromEnvironment {
-                    region = "ap-northeast-1"
                     endpointUrl =
                         Url.parse("http://${dynamoDbContainer.host}:${dynamoDbContainer.firstMappedPort}")
-                    credentialsProvider = StaticCredentialsProvider {
-                        accessKeyId = "XX"
-                        secretAccessKey = "XX"
-                    }
                 }
             }
 
@@ -108,7 +141,7 @@ class WhatsNewRepositoryIT {
                             KeySchemaElement {
                                 attributeName = "releaseId"
                                 keyType = KeyType.Range
-                            },
+                            }
                         )
                         attributeDefinitions = listOf(
                             AttributeDefinition {
@@ -118,7 +151,7 @@ class WhatsNewRepositoryIT {
                             AttributeDefinition {
                                 attributeName = "releaseId"
                                 attributeType = ScalarAttributeType.N
-                            },
+                            }
                         )
                         provisionedThroughput {
                             readCapacityUnits = 10
@@ -131,7 +164,9 @@ class WhatsNewRepositoryIT {
                         item = WhatsNew(
                             1,
                             1,
-                            LocalDate.of(2024, 1, 1)
+                            LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                            "",
+                            ""
                         ).toAttributeValues()
                     }
                 }

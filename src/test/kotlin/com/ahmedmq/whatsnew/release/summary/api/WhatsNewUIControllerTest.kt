@@ -1,32 +1,67 @@
 package com.ahmedmq.whatsnew.release.summary.api
 
+import com.ahmedmq.whatsnew.release.summary.persistence.WhatsNew
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
-import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import java.time.LocalDate
+import java.time.LocalDateTime
 
-@WebMvcTest
+@WebMvcTest(WhatsNewUIController::class)
 class WhatsNewUIControllerTest {
 
-    val mockMvc: MockMvc = MockMvcBuilders
-        .standaloneSetup(WhatsNewUIController::class.java)
-        .build()
+    @MockkBean
+    lateinit var mockWhatsNewService: WhatsNewService
+
+    @Autowired
+    lateinit var mockMvc: MockMvc
 
     @Test
-    fun `return whats-new data`() {
+    fun `return whats new data`() {
+        every { mockWhatsNewService.getWhatsNewForProject(WhatsNewRequest(
+            "token",
+            1,
+            "apiKey"
+        )) } returns listOf(WhatsNew(
+            1,
+            1,
+            LocalDateTime.of(2024, 1, 1,0,0,0),
+            "",
+            ""
+        ))
         mockMvc.perform(
             post("/whats-new")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("apiToken", "XXX")
-                .param("projectId","123")
-            )
+                .param("apiToken", "token")
+                .param("projectId", "1")
+                .param("openAiToken", "apiKey")
+        )
             .andExpect(status().isOk)
             .andExpect(view().name("index"))
 //            .andExpect(MockMvcResultMatchers.model().attributeExists("whatsNewResponse"))
+    }
+
+    @Test
+    fun `return whats new data for release id for given project id`() {
+        every { mockWhatsNewService.getWhatsNewForProjectRelease(1, 1) } returns WhatsNew(
+            1,
+            1,
+            LocalDateTime.of(2024, 1, 1,0,0,0),
+            "",
+            ""
+        )
+        mockMvc.perform(
+            get("/whats-new/1/1")
+        )
+            .andExpect(status().isOk)
+            .andExpect(view().name("index"))
     }
 }
