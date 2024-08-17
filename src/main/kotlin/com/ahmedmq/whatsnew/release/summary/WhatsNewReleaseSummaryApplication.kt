@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class WhatsNewReleaseSummaryApplication
 
 fun main(args: Array<String>) {
-	runApplication<WhatsNewReleaseSummaryApplication>(*args)
+    runApplication<WhatsNewReleaseSummaryApplication>(*args)
 }

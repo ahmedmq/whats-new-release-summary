@@ -13,7 +13,7 @@ class DynamoDbConfig(val environment: Environment) {
     @Bean
     fun dynamoDbClient(): DynamoDbClient {
         return when {
-            environment.activeProfiles.any { it in listOf("local", "e2e")} -> {
+            environment.activeProfiles.any { it in listOf("local", "e2e") } -> {
                 runBlocking {
                     DynamoDbClient.fromEnvironment {
                         endpointUrl = Url.parse("http://localhost:8000")

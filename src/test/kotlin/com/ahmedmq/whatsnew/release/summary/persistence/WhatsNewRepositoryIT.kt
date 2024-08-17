@@ -32,7 +32,7 @@ class WhatsNewRepositoryIT {
     companion object {
         private var dynamoDbContainer = GenericContainer<Nothing>(
             DockerImageName.parse("public.ecr.aws/aws-dynamodb-local/aws-dynamodb-local:latest")
-                .asCompatibleSubstituteFor("amazon/dynamodb-local")
+                .asCompatibleSubstituteFor("amazon/dynamodb-local"),
         ).apply {
             withExposedPorts(8000)
         }
@@ -58,9 +58,10 @@ class WhatsNewRepositoryIT {
                     LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                     "",
                     "",
-                    ""
-                )
-            ), whatsNewList
+                    "",
+                ),
+            ),
+            whatsNewList,
         )
     }
 
@@ -76,8 +77,9 @@ class WhatsNewRepositoryIT {
                 LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                 "",
                 "",
-                ""
-            ), whatsNew
+                "",
+            ),
+            whatsNew,
         )
     }
 
@@ -91,8 +93,8 @@ class WhatsNewRepositoryIT {
                 LocalDateTime.of(2024, 2, 2, 0, 0, 0),
                 "",
                 "",
-                ""
-            )
+                "",
+            ),
         )
         val whatsNewList = whatsNewRepository.findAllByProject(1)
 
@@ -104,7 +106,7 @@ class WhatsNewRepositoryIT {
                     LocalDateTime.of(2024, 2, 2, 0, 0, 0),
                     "",
                     "",
-                    ""
+                    "",
                 ),
                 WhatsNew(
                     1,
@@ -112,9 +114,10 @@ class WhatsNewRepositoryIT {
                     LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                     "",
                     "",
-                    ""
-                )
-            ), whatsNewList
+                    "",
+                ),
+            ),
+            whatsNewList,
         )
     }
 
@@ -131,7 +134,6 @@ class WhatsNewRepositoryIT {
                 }
             }
 
-
         @Bean
         fun clr(dynamoDbClient: DynamoDbClient): CommandLineRunner {
             return CommandLineRunner {
@@ -146,7 +148,7 @@ class WhatsNewRepositoryIT {
                             KeySchemaElement {
                                 attributeName = "releaseId"
                                 keyType = KeyType.Range
-                            }
+                            },
                         )
                         attributeDefinitions = listOf(
                             AttributeDefinition {
@@ -156,7 +158,7 @@ class WhatsNewRepositoryIT {
                             AttributeDefinition {
                                 attributeName = "releaseId"
                                 attributeType = ScalarAttributeType.N
-                            }
+                            },
                         )
                         provisionedThroughput {
                             readCapacityUnits = 10
@@ -172,12 +174,11 @@ class WhatsNewRepositoryIT {
                             LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                             "",
                             "",
-                            ""
+                            "",
                         ).toAttributeValues()
                     }
                 }
             }
         }
     }
-
 }

@@ -15,26 +15,27 @@ class WhatsNewService(val whatsNewRepository: WhatsNewRepository, val trackerCli
 
     fun getWhatsNewForProject(whatsNewRequest: WhatsNewRequest): List<WhatsNew> {
         val releases = trackerClient.releases(
-            whatsNewRequest.apiToken, whatsNewRequest.projectId, mapOf(
+            whatsNewRequest.apiToken,
+            whatsNewRequest.projectId,
+            mapOf(
                 "fields" to "id,name,accepted_at",
-                "with_state" to "accepted"
-            )
+                "with_state" to "accepted",
+            ),
         )
 
         return releases.reversed().mapIndexed { index, r ->
             if (index == 0) {
                 whatsNewRepository.findByProjectIdAndReleaseId(
                     whatsNewRequest.projectId,
-                    releases.last().id
+                    releases.last().id,
                 ) ?: WhatsNew(
                     r.id,
                     whatsNewRequest.projectId,
                     r.acceptedAt,
                     r.name,
                     "",
-                    ""
+                    "",
                 )
-
             } else {
                 WhatsNew(
                     r.id,
@@ -42,16 +43,12 @@ class WhatsNewService(val whatsNewRepository: WhatsNewRepository, val trackerCli
                     r.acceptedAt,
                     r.name,
                     "",
-                    ""
+                    "",
                 )
             }
-
         }
     }
 
-
     fun getWhatsNewForProjectRelease(projectId: Int, releaseId: Int): WhatsNew? =
         whatsNewRepository.findByProjectIdAndReleaseId(projectId, releaseId)
-
-
 }

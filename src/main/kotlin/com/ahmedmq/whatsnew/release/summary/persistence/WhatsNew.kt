@@ -9,7 +9,7 @@ data class WhatsNew(
     val acceptedDate: LocalDateTime,
     val name: String,
     val projectName: String,
-    val content: String
+    val content: String,
 )
 
 fun WhatsNew.toAttributeValues(): Map<String, AttributeValue> = mapOf(
@@ -18,7 +18,7 @@ fun WhatsNew.toAttributeValues(): Map<String, AttributeValue> = mapOf(
     "acceptedDate" to AttributeValue.S(acceptedDate.toString()),
     "name" to AttributeValue.S(name),
     "projectName" to AttributeValue.S(projectName),
-    "content" to AttributeValue.S(content)
+    "content" to AttributeValue.S(content),
 
 )
 
@@ -28,5 +28,5 @@ fun Map<String, AttributeValue>.toWhatsNew(): WhatsNew = WhatsNew(
     acceptedDate = this["acceptedDate"]?.asS()?.let(LocalDateTime::parse) ?: error("Missing or invalid releaseDate"),
     name = this["name"]?.asS() ?: "",
     projectName = this["projectName"]?.asS() ?: error(""),
-    content = this["content"]?.asS() ?: ""
+    content = this["content"]?.asS() ?: "",
 )

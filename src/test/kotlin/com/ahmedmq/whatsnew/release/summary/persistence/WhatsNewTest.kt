@@ -16,7 +16,7 @@ class WhatsNewTest {
             "acceptedDate" to AttributeValue.S("2024-01-01T00:00"),
             "name" to AttributeValue.S("name"),
             "projectName" to AttributeValue.S("projectName"),
-            "content" to AttributeValue.S("content")
+            "content" to AttributeValue.S("content"),
         )
         val whatsNew = WhatsNew(
             1,
@@ -24,7 +24,7 @@ class WhatsNewTest {
             LocalDateTime.of(2024, 1, 1, 0, 0, 0),
             "name",
             "projectName",
-            "content"
+            "content",
         )
 
         val toAttributeValues: Map<String, AttributeValue> = whatsNew.toAttributeValues()
@@ -40,7 +40,7 @@ class WhatsNewTest {
             "acceptedDate" to AttributeValue.S("2024-01-01T00:00"),
             "name" to AttributeValue.S("name"),
             "projectName" to AttributeValue.S("projectName"),
-            "content" to AttributeValue.S("content")
+            "content" to AttributeValue.S("content"),
         )
 
         val whatsNew = requiredEntries.toWhatsNew()
@@ -49,7 +49,7 @@ class WhatsNewTest {
         assertEquals(1, whatsNew.releaseId)
         assertEquals(
             LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-            whatsNew.acceptedDate
+            whatsNew.acceptedDate,
         )
         assertEquals("name", whatsNew.name)
         assertEquals("projectName", whatsNew.projectName)

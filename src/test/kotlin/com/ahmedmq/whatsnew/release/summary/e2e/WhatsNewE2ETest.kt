@@ -18,8 +18,10 @@ class WhatsNewE2ETest {
 
     @BeforeEach
     fun setUp() {
-        context = browser.newContext(Browser.NewContextOptions()
-            .setBaseURL("http://localhost:$port"))
+        context = browser.newContext(
+            Browser.NewContextOptions()
+                .setBaseURL("http://localhost:$port"),
+        )
         page = context.newPage()
     }
 
@@ -47,7 +49,7 @@ class WhatsNewE2ETest {
         val header = whatsNewPage.Header()
 
         whatsNewPage.open()
-        
+
         assertThat(page.getByText("About")).not().isVisible()
         header.hamburger().click()
         assertThat(page.getByText("About")).isVisible()
@@ -63,7 +65,6 @@ class WhatsNewE2ETest {
             playwright = Playwright.create()
             browser = playwright.chromium()
                 .launch()
-               
         }
 
         @JvmStatic

@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @WebMvcTest(WhatsNewUIController::class)
@@ -26,24 +25,30 @@ class WhatsNewUIControllerTest {
 
     @Test
     fun `return whats new data`() {
-        every { mockWhatsNewService.getWhatsNewForProject(WhatsNewRequest(
-            "token",
-            1,
-            "apiKey"
-        )) } returns listOf(WhatsNew(
-            1,
-            1,
-            LocalDateTime.of(2024, 1, 1,0,0,0),
-            "",
-            "",
-            ""
-        ))
+        every {
+            mockWhatsNewService.getWhatsNewForProject(
+                WhatsNewRequest(
+                    "token",
+                    1,
+                    "apiKey",
+                ),
+            )
+        } returns listOf(
+            WhatsNew(
+                1,
+                1,
+                LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                "",
+                "",
+                "",
+            ),
+        )
         mockMvc.perform(
             post("/whats-new")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("apiToken", "token")
                 .param("projectId", "1")
-                .param("openAiToken", "apiKey")
+                .param("openAiToken", "apiKey"),
         )
             .andExpect(status().isOk)
             .andExpect(view().name("index"))
@@ -55,13 +60,13 @@ class WhatsNewUIControllerTest {
         every { mockWhatsNewService.getWhatsNewForProjectRelease(1, 1) } returns WhatsNew(
             1,
             1,
-            LocalDateTime.of(2024, 1, 1,0,0,0),
+            LocalDateTime.of(2024, 1, 1, 0, 0, 0),
             "",
             "",
-            ""
+            "",
         )
         mockMvc.perform(
-            get("/whats-new/1/1")
+            get("/whats-new/1/1"),
         )
             .andExpect(status().isOk)
             .andExpect(view().name("index"))

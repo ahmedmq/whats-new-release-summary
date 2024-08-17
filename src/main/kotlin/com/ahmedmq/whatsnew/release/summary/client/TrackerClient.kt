@@ -19,32 +19,31 @@ interface TrackerClient {
     fun releases(
         @RequestHeader("X-TrackerToken") apiToken: String,
         @PathVariable projectId: Int,
-        @RequestParam params: Map<String, String>
+        @RequestParam params: Map<String, String>,
     ): List<ReleaseResponse>
 
     @GetExchange("/projects/{projectId}/releases/{releaseId}/stories")
     fun releaseStories(
         @RequestHeader("X-TrackerToken") apiToken: String,
         @PathVariable projectId: Int,
-        @PathVariable releaseId: Int
+        @PathVariable releaseId: Int,
     ): StoryResponse
-
 }
 
 data class ProjectResponse(
     val id: Int,
-    val name: String
+    val name: String,
 )
 
 data class ReleaseResponse(
     val id: Int,
     val name: String,
-    @JsonProperty("accepted_at") val acceptedAt: LocalDateTime
+    @JsonProperty("accepted_at") val acceptedAt: LocalDateTime,
 )
 
 data class StoryResponse(
     val id: Int,
     val name: String,
     val description: String,
-    @JsonProperty("story_type") val storyType: String
+    @JsonProperty("story_type") val storyType: String,
 )

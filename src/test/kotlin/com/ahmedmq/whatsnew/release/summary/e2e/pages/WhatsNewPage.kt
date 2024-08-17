@@ -4,7 +4,6 @@ import com.microsoft.playwright.Locator
 import com.microsoft.playwright.Page
 import com.microsoft.playwright.options.AriaRole
 
-
 class WhatsNewPage(val page: Page) {
 
     fun open() {
@@ -18,5 +17,4 @@ class WhatsNewPage(val page: Page) {
 
         fun hamburger(): Locator = locator.getByRole(AriaRole.BUTTON)
     }
-
 }

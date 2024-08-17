@@ -36,9 +36,8 @@ class WhatsNewRepository(private val dynamoDbClient: DynamoDbClient) {
             tableName = WHATS_NEW_TABLE_NAME
             key = mapOf(
                 "projectId" to AttributeValue.N(projectId.toString()),
-                "releaseId" to AttributeValue.N(releaseId.toString())
+                "releaseId" to AttributeValue.N(releaseId.toString()),
             )
         }.item?.toWhatsNew()
     }
-
 }

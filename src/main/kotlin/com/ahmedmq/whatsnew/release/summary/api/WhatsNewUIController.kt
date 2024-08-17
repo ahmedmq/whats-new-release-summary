@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping
 class WhatsNewUIController(val whatsNewService: WhatsNewService) {
 
     @GetMapping("/")
-    fun index( model: Model): String {
-      model.addAttribute("whatsNewRequest", WhatsNewRequest("",1,""))
+    fun index(model: Model): String {
+        model.addAttribute("whatsNewRequest", WhatsNewRequest("", 1, ""))
         return "index"
     }
 
@@ -24,7 +24,7 @@ class WhatsNewUIController(val whatsNewService: WhatsNewService) {
 
     @GetMapping("/whats-new/{projectId}/{releaseId}")
     fun getRelease(@PathVariable projectId: Int, @PathVariable releaseId: Int, model: Model): String {
-        model.addAttribute("whatsNewRequest", WhatsNewRequest("",1,""))
+        model.addAttribute("whatsNewRequest", WhatsNewRequest("", 1, ""))
         whatsNewService.getWhatsNewForProjectRelease(projectId, releaseId)
         return "index"
     }

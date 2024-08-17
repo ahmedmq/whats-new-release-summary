@@ -17,10 +17,10 @@ class WhatsNewRepositoryTest {
     private val testWhatsNew = WhatsNew(
         1,
         1,
-        LocalDateTime.of(2024, 1, 1,0,0,0),
+        LocalDateTime.of(2024, 1, 1, 0, 0, 0),
         "",
         "",
-        ""
+        "",
     )
 
     @Test
@@ -87,15 +87,16 @@ class WhatsNewRepositoryTest {
             item = testWhatsNew.toAttributeValues()
         }
 
-        val whatsNew = whatsNewRepository.findByProjectIdAndReleaseId(1,1)
+        val whatsNew = whatsNewRepository.findByProjectIdAndReleaseId(1, 1)
 
         with(getItemRequestSlot.captured) {
             assertEquals(WHATS_NEW_TABLE_NAME, tableName)
             assertEquals(
                 mapOf(
                     "projectId" to AttributeValue.N("1"),
-                    "releaseId" to AttributeValue.N("1")
-                ), key
+                    "releaseId" to AttributeValue.N("1"),
+                ),
+                key,
             )
         }
         assertEquals(testWhatsNew, whatsNew)

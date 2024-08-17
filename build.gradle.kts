@@ -3,6 +3,7 @@ plugins {
 	kotlin("plugin.spring") version "1.9.24"
 	id("org.springframework.boot") version "3.3.2"
 	id("io.spring.dependency-management") version "1.1.6"
+	id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "com.ahmedmq"
@@ -61,4 +62,16 @@ kotlin {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+	kotlin {
+		ktfmt()
+		ktlint()
+			.editorConfigOverride(
+				mapOf(
+					"ktlint_standard_no-wildcard-imports" to "disabled"
+				)
+			)
+	}
 }
