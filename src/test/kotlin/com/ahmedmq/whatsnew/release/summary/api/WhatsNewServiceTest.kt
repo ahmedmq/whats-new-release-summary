@@ -8,7 +8,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
+import java.time.Instant
 
 class WhatsNewServiceTest {
 
@@ -28,14 +28,14 @@ class WhatsNewServiceTest {
                 ),
             )
         } returns listOf(
-            ReleaseResponse(1, "Release1", LocalDateTime.now()),
-            ReleaseResponse(2, "Release2", LocalDateTime.now()),
+            ReleaseResponse(1, "Release1", Instant.now()),
+            ReleaseResponse(2, "Release2", Instant.now()),
         )
         every { mockWhatsNewRepository.findByProjectIdAndReleaseId(1, 2) } returns
             WhatsNew(
                 2,
                 1,
-                LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                Instant.parse("2024-01-01T01:01:01.00Z"),
                 "",
                 "",
                 "",

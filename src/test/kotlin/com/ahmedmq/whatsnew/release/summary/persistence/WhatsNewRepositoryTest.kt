@@ -2,26 +2,19 @@ package com.ahmedmq.whatsnew.release.summary.persistence
 
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.model.*
+import com.ahmedmq.whatsnew.release.summary.aWhatsNew
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
 class WhatsNewRepositoryTest {
 
     private val dynamoDbClient = mockk<DynamoDbClient>()
     private val whatsNewRepository = WhatsNewRepository(dynamoDbClient)
-    private val testWhatsNew = WhatsNew(
-        1,
-        1,
-        LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-        "",
-        "",
-        "",
-    )
+    private val testWhatsNew = aWhatsNew()
 
     @Test
     fun `save whats new`() {

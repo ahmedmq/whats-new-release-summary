@@ -8,6 +8,7 @@ import aws.sdk.kotlin.services.dynamodb.model.KeyType
 import aws.sdk.kotlin.services.dynamodb.model.ScalarAttributeType
 import aws.sdk.kotlin.services.dynamodb.putItem
 import aws.smithy.kotlin.runtime.net.url.Url
+import com.ahmedmq.whatsnew.release.summary.aWhatsNew
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.junit.jupiter.api.Order
@@ -21,7 +22,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
-import java.time.LocalDateTime
+import java.time.Instant
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
@@ -52,14 +53,7 @@ class WhatsNewRepositoryIT {
 
         assertContentEquals(
             listOf(
-                WhatsNew(
-                    1,
-                    1,
-                    LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-                    "",
-                    "",
-                    "",
-                ),
+                aWhatsNew(),
             ),
             whatsNewList,
         )
@@ -71,14 +65,7 @@ class WhatsNewRepositoryIT {
         val whatsNew = whatsNewRepository.findByProjectIdAndReleaseId(1, 1)
 
         assertEquals(
-            WhatsNew(
-                1,
-                1,
-                LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-                "",
-                "",
-                "",
-            ),
+            aWhatsNew(),
             whatsNew,
         )
     }
@@ -87,35 +74,14 @@ class WhatsNewRepositoryIT {
     @Order(3)
     fun `save whats new and get all sorted in descending order`() {
         whatsNewRepository.save(
-            WhatsNew(
-                2,
-                1,
-                LocalDateTime.of(2024, 2, 2, 0, 0, 0),
-                "",
-                "",
-                "",
-            ),
+            aWhatsNew(releaseId = 2, acceptedAt = Instant.parse("2024-02-02T01:01:01.00Z")),
         )
         val whatsNewList = whatsNewRepository.findAllByProject(1)
 
         assertContentEquals(
             listOf(
-                WhatsNew(
-                    2,
-                    1,
-                    LocalDateTime.of(2024, 2, 2, 0, 0, 0),
-                    "",
-                    "",
-                    "",
-                ),
-                WhatsNew(
-                    1,
-                    1,
-                    LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-                    "",
-                    "",
-                    "",
-                ),
+                aWhatsNew(releaseId = 2, acceptedAt = Instant.parse("2024-02-02T01:01:01.00Z")),
+                aWhatsNew(),
             ),
             whatsNewList,
         )
@@ -168,14 +134,7 @@ class WhatsNewRepositoryIT {
 
                     dynamoDbClient.putItem {
                         tableName = WHATS_NEW_TABLE_NAME
-                        item = WhatsNew(
-                            1,
-                            1,
-                            LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-                            "",
-                            "",
-                            "",
-                        ).toAttributeValues()
+                        item = aWhatsNew().toAttributeValues()
                     }
                 }
             }

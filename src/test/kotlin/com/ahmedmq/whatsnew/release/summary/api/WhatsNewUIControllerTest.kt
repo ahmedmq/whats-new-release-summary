@@ -1,6 +1,6 @@
 package com.ahmedmq.whatsnew.release.summary.api
 
-import com.ahmedmq.whatsnew.release.summary.persistence.WhatsNew
+import com.ahmedmq.whatsnew.release.summary.aWhatsNew
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.junit.jupiter.api.Test
@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.view
-import java.time.LocalDateTime
 
 @WebMvcTest(WhatsNewUIController::class)
 class WhatsNewUIControllerTest {
@@ -34,14 +33,7 @@ class WhatsNewUIControllerTest {
                 ),
             )
         } returns listOf(
-            WhatsNew(
-                1,
-                1,
-                LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-                "",
-                "",
-                "",
-            ),
+            aWhatsNew(),
         )
         mockMvc.perform(
             post("/whats-new")
@@ -57,14 +49,7 @@ class WhatsNewUIControllerTest {
 
     @Test
     fun `return whats new data for release id for given project id`() {
-        every { mockWhatsNewService.getWhatsNewForProjectRelease(1, 1) } returns WhatsNew(
-            1,
-            1,
-            LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-            "",
-            "",
-            "",
-        )
+        every { mockWhatsNewService.getWhatsNewForProjectRelease(1, 1) } returns aWhatsNew()
         mockMvc.perform(
             get("/whats-new/1/1"),
         )

@@ -1,9 +1,10 @@
 package com.ahmedmq.whatsnew.release.summary.persistence
 
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import com.ahmedmq.whatsnew.release.summary.aWhatsNew
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
+import java.time.Instant
 import kotlin.test.assertEquals
 
 class WhatsNewTest {
@@ -13,19 +14,12 @@ class WhatsNewTest {
         val requiredEntries: Map<String, AttributeValue> = mapOf(
             "releaseId" to AttributeValue.N("1"),
             "projectId" to AttributeValue.N("1"),
-            "acceptedDate" to AttributeValue.S("2024-01-01T00:00"),
-            "name" to AttributeValue.S("name"),
-            "projectName" to AttributeValue.S("projectName"),
-            "content" to AttributeValue.S("content"),
+            "acceptedDate" to AttributeValue.S("2024-01-01T01:01:01Z"),
+            "name" to AttributeValue.S("Test Release"),
+            "projectName" to AttributeValue.S("Project X"),
+            "content" to AttributeValue.S("GenAI"),
         )
-        val whatsNew = WhatsNew(
-            1,
-            1,
-            LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-            "name",
-            "projectName",
-            "content",
-        )
+        val whatsNew = aWhatsNew()
 
         val toAttributeValues: Map<String, AttributeValue> = whatsNew.toAttributeValues()
 
@@ -37,7 +31,7 @@ class WhatsNewTest {
         val requiredEntries: Map<String, AttributeValue> = mapOf(
             "releaseId" to AttributeValue.N("1"),
             "projectId" to AttributeValue.N("1"),
-            "acceptedDate" to AttributeValue.S("2024-01-01T00:00"),
+            "acceptedDate" to AttributeValue.S("2024-01-01T01:01:01.00Z"),
             "name" to AttributeValue.S("name"),
             "projectName" to AttributeValue.S("projectName"),
             "content" to AttributeValue.S("content"),
@@ -48,8 +42,8 @@ class WhatsNewTest {
         assertEquals(1, whatsNew.projectId)
         assertEquals(1, whatsNew.releaseId)
         assertEquals(
-            LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-            whatsNew.acceptedDate,
+            Instant.parse("2024-01-01T01:01:01.00Z"),
+            whatsNew.acceptedAt,
         )
         assertEquals("name", whatsNew.name)
         assertEquals("projectName", whatsNew.projectName)
