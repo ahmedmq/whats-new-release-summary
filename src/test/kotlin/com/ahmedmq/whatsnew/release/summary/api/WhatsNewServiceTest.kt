@@ -22,7 +22,7 @@ class WhatsNewServiceTest {
             mockTrackerClient.releases(
                 "token", 1, mapOf(
                     "fields" to "id,name,accepted_at",
-                    "with_state" to "accepted_at"
+                    "with_state" to "accepted"
                 )
             )
         } returns listOf(
@@ -35,6 +35,7 @@ class WhatsNewServiceTest {
                     1,
                     LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                     "",
+                    "",
                     ""
                 )
 
@@ -44,7 +45,7 @@ class WhatsNewServiceTest {
             mockTrackerClient.releases(
                 "token", 1, mapOf(
                     "fields" to "id,name,accepted_at",
-                    "with_state" to "accepted_at"
+                    "with_state" to "accepted"
                 )
             )
         }

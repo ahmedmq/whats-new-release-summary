@@ -57,6 +57,7 @@ class WhatsNewRepositoryIT {
                     1,
                     LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                     "",
+                    "",
                     ""
                 )
             ), whatsNewList
@@ -74,6 +75,7 @@ class WhatsNewRepositoryIT {
                 1,
                 LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                 "",
+                "",
                 ""
             ), whatsNew
         )
@@ -88,6 +90,7 @@ class WhatsNewRepositoryIT {
                 1,
                 LocalDateTime.of(2024, 2, 2, 0, 0, 0),
                 "",
+                "",
                 ""
             )
         )
@@ -100,12 +103,14 @@ class WhatsNewRepositoryIT {
                     1,
                     LocalDateTime.of(2024, 2, 2, 0, 0, 0),
                     "",
+                    "",
                     ""
                 ),
                 WhatsNew(
                     1,
                     1,
                     LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                    "",
                     "",
                     ""
                 )
@@ -165,6 +170,7 @@ class WhatsNewRepositoryIT {
                             1,
                             1,
                             LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                            "",
                             "",
                             ""
                         ).toAttributeValues()

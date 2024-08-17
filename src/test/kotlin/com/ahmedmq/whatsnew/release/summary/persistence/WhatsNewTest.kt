@@ -4,7 +4,6 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 class WhatsNewTest {
@@ -15,15 +14,17 @@ class WhatsNewTest {
             "releaseId" to AttributeValue.N("1"),
             "projectId" to AttributeValue.N("1"),
             "acceptedDate" to AttributeValue.S("2024-01-01T00:00"),
-            "projectName" to AttributeValue.S(""),
-            "content" to AttributeValue.S("")
+            "name" to AttributeValue.S("name"),
+            "projectName" to AttributeValue.S("projectName"),
+            "content" to AttributeValue.S("content")
         )
         val whatsNew = WhatsNew(
             1,
             1,
             LocalDateTime.of(2024, 1, 1, 0, 0, 0),
-            "",
-            ""
+            "name",
+            "projectName",
+            "content"
         )
 
         val toAttributeValues: Map<String, AttributeValue> = whatsNew.toAttributeValues()
@@ -37,8 +38,9 @@ class WhatsNewTest {
             "releaseId" to AttributeValue.N("1"),
             "projectId" to AttributeValue.N("1"),
             "acceptedDate" to AttributeValue.S("2024-01-01T00:00"),
-            "projectName" to AttributeValue.S(""),
-            "content" to AttributeValue.S("")
+            "name" to AttributeValue.S("name"),
+            "projectName" to AttributeValue.S("projectName"),
+            "content" to AttributeValue.S("content")
         )
 
         val whatsNew = requiredEntries.toWhatsNew()
@@ -49,7 +51,8 @@ class WhatsNewTest {
             LocalDateTime.of(2024, 1, 1, 0, 0, 0),
             whatsNew.acceptedDate
         )
-        assertEquals("", whatsNew.projectName)
-        assertEquals("", whatsNew.content)
+        assertEquals("name", whatsNew.name)
+        assertEquals("projectName", whatsNew.projectName)
+        assertEquals("content", whatsNew.content)
     }
 }

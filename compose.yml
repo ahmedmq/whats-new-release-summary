@@ -9,3 +9,20 @@ services:
       - "./docker/dynamodb:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
     restart: always
+  aws-cli:
+    depends_on:
+      - dynamodb-local
+    image: amazon/aws-cli
+    container_name: aws-cli
+    ports: [ "8081:8080" ]
+    environment:
+      AWS_ACCESS_KEY_ID: 'blank'
+      AWS_SECRET_ACCESS_KEY: 'blank'
+      AWS_DEFAULT_REGION: "dynamodb-local"
+    command:
+      "dynamodb create-table \
+           --table-name whats-new \
+           --attribute-definitions AttributeName=releaseId,AttributeType=N AttributeName=projectId,AttributeType=N \
+           --key-schema AttributeName=releaseId,KeyType=HASH AttributeName=projectId,KeyType=RANGE \
+           --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=10 \
+           --endpoint-url http://dynamodb-local:8000 || true | cat"

@@ -17,7 +17,7 @@ class WhatsNewService(val whatsNewRepository: WhatsNewRepository, val trackerCli
         val releases = trackerClient.releases(
             whatsNewRequest.apiToken, whatsNewRequest.projectId, mapOf(
                 "fields" to "id,name,accepted_at",
-                "with_state" to "accepted_at"
+                "with_state" to "accepted"
             )
         )
 
@@ -26,13 +26,21 @@ class WhatsNewService(val whatsNewRepository: WhatsNewRepository, val trackerCli
                 whatsNewRepository.findByProjectIdAndReleaseId(
                     whatsNewRequest.projectId,
                     releases.last().id
-                ) ?: TODO()
+                ) ?: WhatsNew(
+                    r.id,
+                    whatsNewRequest.projectId,
+                    r.acceptedAt,
+                    r.name,
+                    "",
+                    ""
+                )
 
             } else {
                 WhatsNew(
                     r.id,
                     whatsNewRequest.projectId,
                     r.acceptedAt,
+                    r.name,
                     "",
                     ""
                 )

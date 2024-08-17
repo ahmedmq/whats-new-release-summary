@@ -35,6 +35,7 @@ class WhatsNewUIControllerTest {
             1,
             LocalDateTime.of(2024, 1, 1,0,0,0),
             "",
+            "",
             ""
         ))
         mockMvc.perform(
@@ -55,6 +56,7 @@ class WhatsNewUIControllerTest {
             1,
             1,
             LocalDateTime.of(2024, 1, 1,0,0,0),
+            "",
             "",
             ""
         )

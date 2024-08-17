@@ -19,6 +19,7 @@ class WhatsNewRepositoryTest {
         1,
         LocalDateTime.of(2024, 1, 1,0,0,0),
         "",
+        "",
         ""
     )
 

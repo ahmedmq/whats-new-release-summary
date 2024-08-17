@@ -39,3 +39,4 @@ out/
 ### Kotlin ###
 .kotlin
 /src/main/frontend/node_modules/
+docker/dynamodb
