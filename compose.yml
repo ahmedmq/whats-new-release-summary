@@ -1,5 +1,6 @@
 services:
   ollama:
+    container_name: ollama
     volumes:
       - ollama:/root/.ollama
     ports:
@@ -10,6 +11,7 @@ services:
 
   ollama-pull:
     image: docker/genai:ollama-pull
+    container_name: ollama-pull
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - LLM=llama3.1
