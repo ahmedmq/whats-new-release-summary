@@ -1,8 +1,13 @@
 spring:
   application:
     name: whats-new-release-summary
-  autoconfigure:
-    exclude: org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration
+  ai:
+    openai:
+      chat:
+        base-url: http://localhost:11434
+        options:
+          model: llama3.1
+      api-key: abc
 tracker:
   api:
     baseUrl: https://www.pivotaltracker.com/services/v5

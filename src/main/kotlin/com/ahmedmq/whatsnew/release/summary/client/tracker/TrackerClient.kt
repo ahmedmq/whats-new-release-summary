@@ -1,4 +1,4 @@
-package com.ahmedmq.whatsnew.release.summary.client
+package com.ahmedmq.whatsnew.release.summary.client.tracker
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.web.bind.annotation.PathVariable
@@ -27,7 +27,8 @@ interface TrackerClient {
         @RequestHeader("X-TrackerToken") apiToken: String,
         @PathVariable projectId: Int,
         @PathVariable releaseId: Int,
-    ): StoryResponse
+        @RequestParam params: Map<String, String>,
+    ): List<StoryResponse>
 }
 
 data class ProjectResponse(
@@ -46,4 +47,10 @@ data class StoryResponse(
     val name: String,
     val description: String,
     @JsonProperty("story_type") val storyType: String,
+    val labels: List<LabelsResponse>,
+)
+
+data class LabelsResponse(
+    val id: Int,
+    val name: String,
 )

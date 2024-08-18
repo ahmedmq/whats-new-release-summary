@@ -1,23 +1,27 @@
 package com.ahmedmq.whatsnew.release.summary.api
 
-import com.ahmedmq.whatsnew.release.summary.client.ReleaseResponse
-import com.ahmedmq.whatsnew.release.summary.client.TrackerClient
+import com.ahmedmq.whatsnew.release.summary.client.tracker.ReleaseResponse
+import com.ahmedmq.whatsnew.release.summary.client.tracker.TrackerClient
 import com.ahmedmq.whatsnew.release.summary.persistence.WhatsNew
 import com.ahmedmq.whatsnew.release.summary.persistence.WhatsNewRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
+import org.springframework.ai.chat.client.ChatClient
 import java.time.Instant
 
 class WhatsNewServiceTest {
 
     val mockTrackerClient = mockk<TrackerClient>()
     val mockWhatsNewRepository = mockk<WhatsNewRepository>()
-    val whatsNewService = WhatsNewService(mockWhatsNewRepository, mockTrackerClient)
+    val mockChatClientBuilder = mockk<ChatClient.Builder>()
+    val mockChatClient = mockk<ChatClient>()
+    val whatsNewService = WhatsNewService(mockWhatsNewRepository, mockTrackerClient, mockChatClientBuilder)
 
     @Test
     fun `whats new for project should return from dynamodb if present`() {
+        every { mockChatClientBuilder.build() } returns mockChatClient
         every {
             mockTrackerClient.releases(
                 "token",

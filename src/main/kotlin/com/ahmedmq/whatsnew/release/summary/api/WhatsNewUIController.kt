@@ -11,7 +11,14 @@ class WhatsNewUIController(val whatsNewService: WhatsNewService) {
 
     @GetMapping("/")
     fun index(model: Model): String {
-        model.addAttribute("whatsNewRequest", WhatsNewRequest("", 1, ""))
+        model.addAttribute(
+            "whatsNewRequest",
+            WhatsNewRequest(
+                "",
+                1,
+                "",
+            ),
+        )
         return "index"
     }
 

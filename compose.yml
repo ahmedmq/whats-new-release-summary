@@ -1,4 +1,40 @@
 services:
+  ollama:
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "11434:11434"
+    tty: true
+    restart: unless-stopped
+    image: ollama/ollama:latest
+
+  ollama-pull:
+    image: docker/genai:ollama-pull
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - LLM=llama3.1
+
+  open-webui:
+    build:
+      context: .
+      args:
+        OLLAMA_BASE_URL: '/ollama'
+      dockerfile: Dockerfile
+    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+    container_name: open-webui
+    volumes:
+      - open-webui:/app/backend/data
+    depends_on:
+      - ollama
+    ports:
+      - ${OPEN_WEBUI_PORT-3000}:8080
+    environment:
+      - 'OLLAMA_BASE_URL=http://ollama:11434'
+      - 'WEBUI_SECRET_KEY='
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: unless-stopped
+
   dynamodb-local:
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
     image: "amazon/dynamodb-local:latest"
@@ -9,6 +45,7 @@ services:
       - "./docker/dynamodb:/home/dynamodblocal/data"
     working_dir: /home/dynamodblocal
     restart: always
+
   aws-cli:
     depends_on:
       - dynamodb-local
@@ -26,3 +63,7 @@ services:
            --key-schema AttributeName=releaseId,KeyType=HASH AttributeName=projectId,KeyType=RANGE \
            --provisioned-throughput ReadCapacityUnits=10,WriteCapacityUnits=10 \
            --endpoint-url http://dynamodb-local:8000 || true | cat"
+
+volumes:
+  ollama: {}
+  open-webui: {}
